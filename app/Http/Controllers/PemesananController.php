@@ -5,13 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\Pemesanan;
 use App\Http\Requests\StorePemesananRequest;
 use App\Http\Requests\UpdatePemesananRequest;
+use App\Models\DetailPemesanan;
+use App\Models\Produk;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class PemesananController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
@@ -39,27 +43,45 @@ class PemesananController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \App\Http\Requests\StorePemesananRequest  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(StorePemesananRequest $request)
     {
-        //
-        $this->validate($request, [
-            'id_produk' => 'required',
-            'id_pengguna' => 'required',
-            'jumlah_pemesanan' => 'required',
-            'total_harga' => 'required',
-        ]);
-        $data = Pemesanan::create([
-            'id_produk' => $request->id_produk,
-            'id_pengguna' => $request->id_pengguna,
-            'jumlah_pemesanan' => $request->jumlah_pemesanan,
-            'total_harga' => $request->total_harga,
-        ]);
-        return response()->json([
-            "msg" => "data berhasil diinputkan",
-            "data" => $data
-        ]);
+        // Validator::make($request->all(), [
+        //     'title' => 'required|unique:posts|max:255',
+        //     'body' => 'required',
+        // ])->validate();
+
+
+        DB::beginTransaction();
+        try {
+            $dataPemesanan = Pemesanan::create([
+                'id_pengguna' => $request->input('id_pengguna'),
+                'total_harga' => $request->input('total_harga')
+            ]);
+
+            foreach ($request->input("list_produk") as $dataListProduk) {
+                $isProdukExist = Produk::where("id_produk", $dataListProduk['id_produk'])->first();
+                if($isProdukExist != null) {
+                    DetailPemesanan::create([
+                        'id_pemesanan' => $dataPemesanan->id,
+                        'jumlah_pemesanan' => $dataListProduk['qty'],
+                        'total_harga' => $isProdukExist->harga_produk,
+                    ]);
+                }
+            }
+            DB::commit();
+            return response()->json([
+                "msg" => "data pemesanan berhasil diinputkan"
+            ]);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            dd($th);
+            return response()->json([
+                "msg" => "data gagal diinputkan",
+                "error" => $th
+            ]);
+        }
     }
 
     /**
@@ -89,7 +111,7 @@ class PemesananController extends Controller
      *
      * @param  \App\Http\Requests\UpdatePemesananRequest  $request
      * @param  \App\Models\Pemesanan  $Pemesanan
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(UpdatePemesananRequest $request, $id)
     {
@@ -116,7 +138,7 @@ class PemesananController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Pemesanan  $Pemesanan
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
     {
