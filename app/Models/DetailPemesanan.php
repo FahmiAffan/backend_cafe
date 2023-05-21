@@ -16,4 +16,10 @@ class DetailPemesanan extends Model
     ];
     protected $guarded = ['id_detail_pemesanan'];
     protected $table = 'detail_pemesanan';
+    protected $primaryKey = 'id_detail_pemesanan';
+
+    public function pemesanan()
+    {
+        return $this->belongsTo(Pemesanan::class);
+    }
 }

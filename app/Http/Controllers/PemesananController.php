@@ -20,12 +20,16 @@ class PemesananController extends Controller
     public function index()
     {
         //
-        $data = Pemesanan::join('produk', 'pemesanan.id_produk', '=', 'produk.id_produk')
-            ->join('pengguna', 'pemesanan.id_pengguna', '=', 'pengguna.id_pengguna')
-            ->get();
+        // $data = Pemesanan::join('produk', 'pemesanan.id_produk', '=', 'produk.id_produk')
+        //     ->join('pengguna', 'pemesanan.id_pengguna', '=', 'pengguna.id_pengguna')
+        //     ->get();
+        $datas = Pemesanan::with('detailPemesanan')->get();
+        foreach ($datas as $data) {
+        }
+        // dd($datas[1]->detailPemesanan);
         return response()->json([
             "msg" => "berhasil ambil data",
-            "data" => $data
+            "data" => $datas
         ]);
     }
 
