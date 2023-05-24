@@ -8,7 +8,9 @@ use App\Http\Requests\UpdatePemesananRequest;
 use App\Models\DetailPemesanan;
 use App\Models\Meja;
 use App\Models\Menu;
+use Error;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class PemesananController extends Controller
@@ -70,11 +72,15 @@ class PemesananController extends Controller
             foreach ($request->input("list_menu") as $dataListProduk) {
                 $isProdukExist = Menu::where("id_menu", $dataListProduk['id_menu'])->first();
                 if ($isProdukExist != null) {
-                    DetailPemesanan::create([
+                    $data = DetailPemesanan::create([
                         'id_pemesanan' => $dataPemesanan->id_pemesanan,
+                        'id_meja' => $dataPemesanan->id_meja,
                         'jumlah_pemesanan' => $dataListProduk['qty'],
                         'total_harga' => $isProdukExist->harga_menu,
                     ]);
+                    Log::debug($data);
+                } else {
+                    throw new \Exception("Menu tidak ada");
                 }
             }
             DB::commit();
