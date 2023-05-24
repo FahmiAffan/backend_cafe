@@ -44,16 +44,16 @@ class PenggunaController extends Controller
         //
         $this->validate($request, [
             'nama_pengguna'     => 'required',
-            'email'     => 'required|email',
+            'username'     => 'required|email',
             'password'     => 'required|min:6',
-            'level'   => 'required',
+            'role'   => 'required',
             'saldo'   => 'required',
         ]);
         $data = Pengguna::create([
             "nama_pengguna" => $request->nama_pengguna,
-            "email" => $request->email,
+            "username" => $request->username,
             "password" => $request->password,
-            "level" => $request->level,
+            "role" => $request->role,
             "saldo" => $request->saldo,
         ]);
         return response()->json([
@@ -96,12 +96,12 @@ class PenggunaController extends Controller
         //
         $this->validate($request, [
             'nama_pengguna'     => 'required',
-            'level'   => 'required',
+            'role'   => 'required',
             'saldo'   => 'required',
         ]);
         $data = Pengguna::where('id_pengguna', $id)->update([
             "nama_pengguna" => $request->nama_pengguna,
-            "level" => $request->level,
+            "role" => $request->role,
             "saldo" => $request->saldo,
         ]);
         return response()->json([

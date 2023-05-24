@@ -16,12 +16,14 @@ return new class extends Migration
         Schema::create('detail_pemesanan', function (Blueprint $table) {
             $table->id('id_detail_pemesanan');
             $table->unsignedBigInteger('id_pemesanan');
+            $table->unsignedBigInteger('id_meja');
             $table->integer('jumlah_pemesanan');
             $table->integer('total_harga');
             $table->timestamps();
         });
         Schema::table('detail_pemesanan', function (Blueprint $table){
             $table->foreign('id_pemesanan')->references('id_pemesanan')->on('pemesanan');
+            $table->foreign('id_meja')->references('id_meja')->on('meja');
         });
     }
 

@@ -14,13 +14,13 @@ return new class extends Migration
     public function up()
     {
         //
-        Schema::create('pengguna',  function (Blueprint $table) {
-            $table->id('id_pengguna');
-            $table->string('nama_pengguna');
-            $table->string('username');
-            $table->string('password');
-            $table->enum('role', ['admin', 'kasir' , 'manajer']);
-            $table->integer('saldo');
+        Schema::create('menu', function (Blueprint $table) {
+            $table->id('id_menu');
+            $table->string('nama_menu');
+            $table->integer('harga_menu');
+            $table->enum('jenis_menu', ['makanan','minuman']);
+            $table->text('deskripsi');
+            $table->string('gambar');
             $table->timestamps();
         });
     }
@@ -32,7 +32,7 @@ return new class extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('menu');
         //
-        Schema::dropIfExists('pengguna');
     }
 };

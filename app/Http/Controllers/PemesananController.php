@@ -6,7 +6,8 @@ use App\Models\Pemesanan;
 use App\Http\Requests\StorePemesananRequest;
 use App\Http\Requests\UpdatePemesananRequest;
 use App\Models\DetailPemesanan;
-use App\Models\Produk;
+use App\Models\Meja;
+use App\Models\Menu;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -20,14 +21,11 @@ class PemesananController extends Controller
     public function index()
     {
         //
-        // $data = Pemesanan::join('produk', 'pemesanan.id_produk', '=', 'produk.id_produk')
-        //     ->join('pengguna', 'pemesanan.id_pengguna', '=', 'pengguna.id_pengguna')
+        // $data = Pemesanan::join('produk', 'pemesanan.id_menu', '=', 'produk.id_menu')
+        //     ->join('pengguna', 'pemesanan.id_user', '=', 'pengguna.id_user')
         //     ->get();
         $datas = Pemesanan::with('detailPemesanan')->get();
-        return response()->json([
-            "msg" => "berhasil ambil data",
-            "data" => $datas
-        ]);
+        return response()->json($datas);
     }
 
     /**
@@ -52,22 +50,30 @@ class PemesananController extends Controller
         //     'title' => 'required|unique:posts|max:255',
         //     'body' => 'required',
         // ])->validate();
-
+        // $request->validate([
+        //     'id_users' => 'required',
+        //     'id_meja' => 'required',
+        //     'total_harga' => 'required',
+        //     'id_pemesanan' => 'required',
+        //     'jumlah_pemesanan' => 'required',
+        //     'total_harga' => 'required'
+        // ]);
 
         DB::beginTransaction();
         try {
             $dataPemesanan = Pemesanan::create([
-                'id_pengguna' => $request->input('id_pengguna'),
+                'id_users' => $request->input('id_users'),
+                'id_meja' => $request->input('id_meja'),
                 'total_harga' => $request->input('total_harga')
             ]);
 
-            foreach ($request->input("list_produk") as $dataListProduk) {
-                $isProdukExist = Produk::where("id_produk", $dataListProduk['id_produk'])->first();
-                if($isProdukExist != null) {
+            foreach ($request->input("list_menu") as $dataListProduk) {
+                $isProdukExist = Menu::where("id_menu", $dataListProduk['id_menu'])->first();
+                if ($isProdukExist != null) {
                     DetailPemesanan::create([
                         'id_pemesanan' => $dataPemesanan->id_pemesanan,
                         'jumlah_pemesanan' => $dataListProduk['qty'],
-                        'total_harga' => $isProdukExist->harga_produk,
+                        'total_harga' => $isProdukExist->harga_menu,
                     ]);
                 }
             }
@@ -118,14 +124,14 @@ class PemesananController extends Controller
     {
         //
         $this->validate($request, [
-            'id_produk' => 'required',
-            'id_pengguna' => 'required',
+            'id_menu' => 'required',
+            'id_users' => 'required',
             'jumlah_pemesanan' => 'required',
             'total_harga' => 'required',
         ]);
         $data = Pemesanan::where('id_pemesanan', $id)->update([
-            'id_produk' => $request->id_produk,
-            'id_pengguna' => $request->id_pengguna,
+            'id_menu' => $request->id_menu,
+            'id_users' => $request->id_users,
             'jumlah_pemesanan' => $request->jumlah_pemesanan,
             'total_harga' => $request->total_harga,
         ]);

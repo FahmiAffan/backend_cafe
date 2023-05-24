@@ -16,15 +16,16 @@ return new class extends Migration
         //
         Schema::create('pemesanan',  function (Blueprint $table) {
             $table->id('id_pemesanan');
-            $table->unsignedBigInteger('id_produk');
-            $table->unsignedBigInteger('id_pengguna');
+            $table->unsignedBigInteger('id_menu');
+            $table->unsignedBigInteger('id_meja');
+            $table->unsignedBigInteger('id_users');
             $table->integer('jumlah_pemesanan');
-            $table->integer('total_harga');
             $table->timestamps();
         });
         Schema::table('pemesanan', function (Blueprint $table){
-            $table->foreign('id_produk')->references('id_produk')->on('produk')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('id_pengguna')->references('id_pengguna')->on('pengguna')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('id_menu')->references('id_menu')->on('menu')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('id_users')->references('id_users')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('id_meja')->references('id_meja')->on('meja')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

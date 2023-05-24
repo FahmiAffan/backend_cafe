@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Produk;
+use App\Models\Menu;
 use Illuminate\Http\Request;
 
-class ProdukController extends Controller
+class MenuController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +15,7 @@ class ProdukController extends Controller
     public function index()
     {
         //
-        $data = Produk::all();
+        $data = Menu::all();
         return response()->json([
             "msg" => "berhasil",
             "data" => $data
@@ -42,15 +42,19 @@ class ProdukController extends Controller
     public function store(Request $request)
     {
         //
-        $this->validate($request, [
-            'nama_produk'     => 'required',
-            'harga_produk'   => 'required',
-            'jumlah_produk'   => 'required',
+        $request->validate([
+            'nama_menu'     => 'required',
+            'harga_menu'   => 'required',
+            'jenis'   => 'required',
+            'deskripsi'   => 'required',
+            'gambar'   => 'required',
         ]);
-        $data = Produk::create([
-            "nama_produk" => $request->nama_produk,
-            "harga_produk" => $request->harga_produk,
-            "jumlah_produk" => $request->jumlah_produk
+        $data = Menu::create([
+            "nama_menu" => $request->nama_menu,
+            "harga_menu" => $request->harga_menu,
+            "jenis" => $request->jenis,
+            "deskripsi" => $request->deskripsi,
+            "gambar" => $request->gambar
         ]);
         return response()->json([
             "msg" => "Data Berhasil Diinputkan",
@@ -92,14 +96,14 @@ class ProdukController extends Controller
     {
         //
         $this->validate($request, [
-            'nama_produk'     => 'required',
-            'harga_produk'   => 'required',
-            'jumlah_produk'   => 'required',
+            'nama_menu'     => 'required',
+            'harga_menu'   => 'required',
+            'jumlah_menu'   => 'required',
         ]);
-        $data = Produk::where('id_produk', $id)->update([
-            "nama_produk" => $request->nama_produk,
-            "harga_produk" => $request->harga_produk,
-            "jumlah_produk" => $request->jumlah_produk,
+        $data = Menu::where('id_menu', $id)->update([
+            "nama_menu" => $request->nama_menu,
+            "harga_menu" => $request->harga_menu,
+            "jumlah_menu" => $request->jumlah_menu,
         ]);
         return response()->json([
             "msg" => "Data Berhasil Di Update",
@@ -116,7 +120,7 @@ class ProdukController extends Controller
     public function destroy($id)
     {
         //
-        $data = Produk::where('id_produk', $id)->delete();
+        $data = Menu::where('id_menu', $id)->delete();
         return response()->json([
             "msg" => "Data Berhasil dihapus",
             "data" => $data,
