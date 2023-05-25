@@ -27,9 +27,8 @@ Route::resource('produk', MenuController::class);
 Route::resource('pengguna', PenggunaController::class);
 Route::resource('pemesanan', PemesananController::class);
 Route::resource('meja', MejaController::class);
+Route::get('/getimg/{id}', [MenuController::class, 'getImage']);
 Route::post('/login', App\Http\Controllers\Api\LoginController::class)->name('login');
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::middleware('auth:api')->resource('/user',UserController::class);
 Route::post('/register', App\Http\Controllers\Api\RegisterController::class)->name('register');
 Route::post('/logout', App\Http\Controllers\Api\LogoutController::class)->name('logout');

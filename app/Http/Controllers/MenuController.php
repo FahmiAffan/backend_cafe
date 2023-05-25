@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Menu;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class MenuController extends Controller
 {
@@ -16,10 +17,9 @@ class MenuController extends Controller
     {
         //
         $data = Menu::all();
-        return response()->json([
-            "msg" => "berhasil",
-            "data" => $data
-        ]);
+        return response()->json(
+            $data
+        );
     }
 
     /**
@@ -30,7 +30,7 @@ class MenuController extends Controller
     public function create()
     {
         //
-        
+
     }
 
     /**
@@ -49,12 +49,16 @@ class MenuController extends Controller
             'deskripsi'   => 'required',
             'gambar'   => 'required',
         ]);
+
+        $gambar = $request->file('gambar');
+        $gambar->storeAs('public/blogs/', $gambar->hashName());
+
         $data = Menu::create([
             "nama_menu" => $request->nama_menu,
             "harga_menu" => $request->harga_menu,
             "jenis" => $request->jenis,
             "deskripsi" => $request->deskripsi,
-            "gambar" => $request->gambar
+            "gambar" => $gambar->hashName()
         ]);
         return response()->json([
             "msg" => "Data Berhasil Diinputkan",
@@ -82,7 +86,7 @@ class MenuController extends Controller
     public function edit($id)
     {
         //
-        
+
     }
 
     /**
@@ -126,5 +130,12 @@ class MenuController extends Controller
             "data" => $data,
             "id" => $id,
         ]);
+    }
+    public function getImage($id)
+    {
+        $menu = Menu::where('gambar' , $id)->get();
+        $data = Storage::url("public/blogs/", $menu);
+        return response()->download($data);
+        // return response()->download('public/blogs/'+ $id);
     }
 }
