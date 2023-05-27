@@ -12,6 +12,7 @@ class DetailPemesanan extends Model
     protected $fillable = [
         'id_pemesanan',
         'id_meja',
+        'id_menu',
         'jumlah_pemesanan',
         'total_harga',
     ];
@@ -22,5 +23,9 @@ class DetailPemesanan extends Model
     public function pemesanan()
     {
         return $this->belongsTo(Pemesanan::class);
+    }
+    public function detailMenu()
+    {
+        return $this->hasOne(Menu::class, 'id_menu');
     }
 }

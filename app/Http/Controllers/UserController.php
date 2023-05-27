@@ -15,8 +15,6 @@ class UserController extends Controller
     public function index(Request $request,$id)
     {
         //
-        $data = User::get()->where($id , 'id_users');
-        return response($data);
     }
 
     /**

@@ -47,22 +47,23 @@ class MenuController extends Controller
             'harga_menu'   => 'required',
             'jenis'   => 'required',
             'deskripsi'   => 'required',
-            'gambar'   => 'required',
+            // 'gambar'   => 'required',
+            'gambarUrl'   => 'required',
         ]);
 
-        $gambar = $request->file('gambar');
-        $gambar->storeAs('public/blogs/', $gambar->hashName());
+        // $gambar = $request->file('gambar');
+        // $gambar->storeAs('public/blogs/', $gambar->hashName());
 
         $data = Menu::create([
             "nama_menu" => $request->nama_menu,
             "harga_menu" => $request->harga_menu,
             "jenis" => $request->jenis,
             "deskripsi" => $request->deskripsi,
-            "gambar" => $gambar->hashName()
+            // "gambar" => $gambar->hashName(),
+            "gambarUrl" => $request->gambarUrl,
         ]);
         return response()->json([
-            "msg" => "Data Berhasil Diinputkan",
-            "data" => $data
+            $data
         ]);
     }
 
@@ -131,11 +132,12 @@ class MenuController extends Controller
             "id" => $id,
         ]);
     }
-    public function getImage($id)
+    public function getImage()
     {
-        $menu = Menu::where('gambar' , $id)->get();
-        $data = Storage::url("public/blogs/", $menu);
-        return response()->download($data);
+        $gambar = Menu::where('gambar')->get();
+        $data = Storage::url('public/blogs/' . $gambar);
+        return response($data);
+        // return response()->download($data);
         // return response()->download('public/blogs/'+ $id);
     }
 }

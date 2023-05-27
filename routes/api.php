@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\GetUser;
 use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\PemesananController;
 use App\Http\Controllers\PenggunaController;
@@ -27,7 +28,18 @@ Route::resource('produk', MenuController::class);
 Route::resource('pengguna', PenggunaController::class);
 Route::resource('pemesanan', PemesananController::class);
 Route::resource('meja', MejaController::class);
-Route::get('/getimg/{id}', [MenuController::class, 'getImage']);
+Route::get('/getimg', [MenuController::class, 'getImage']);
+
+
+// Route::group(['middleware' => ['auth' , 'hakakses:admin,manajer,kasir']], function(){
+//     Route::resource('produk', MenuController::class);
+//     Route::resource('pengguna', PenggunaController::class);
+//     Route::resource('pemesanan', PemesananController::class);
+//     Route::resource('meja', MejaController::class);
+//     Route::get('/getimg/{id}', [MenuController::class, 'getImage']);
+// });
+
+Route::get('/getUser', [GetUser::class, 'getUser']);
 Route::post('/login', App\Http\Controllers\Api\LoginController::class)->name('login');
 Route::middleware('auth:api')->resource('/user',UserController::class);
 Route::post('/register', App\Http\Controllers\Api\RegisterController::class)->name('register');

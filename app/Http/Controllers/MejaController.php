@@ -18,8 +18,7 @@ class MejaController extends Controller
         //
         $data = Meja::all();
         return response()->json([
-            "msg" => "berhasil",
-            "data" => $data
+            $data
         ]);
     }
 
@@ -60,9 +59,11 @@ class MejaController extends Controller
      * @param  \App\Models\Meja  $meja
      * @return \Illuminate\Http\Response
      */
-    public function show(Meja $meja)
+    public function show($id)
     {
         //
+        $data = Meja::where('id_meja', $id)->get();
+        return response()->json($data);
     }
 
     /**
@@ -89,7 +90,7 @@ class MejaController extends Controller
         $request->validate([
             'nomor_meja'     => 'required',
         ]);
-        $data = Meja::where('id_meja',$id)->update([
+        $data = Meja::where('id_meja', $id)->update([
             "nomor_meja" => $request->nomor_meja,
         ]);
         return response()->json([

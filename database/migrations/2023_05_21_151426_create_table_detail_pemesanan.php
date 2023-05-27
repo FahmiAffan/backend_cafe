@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id('id_detail_pemesanan');
             $table->unsignedBigInteger('id_pemesanan');
             $table->unsignedBigInteger('id_meja');
+            $table->unsignedBigInteger('id_menu');
             $table->integer('jumlah_pemesanan');
             $table->integer('total_harga');
             $table->timestamps();
@@ -24,6 +25,7 @@ return new class extends Migration
         Schema::table('detail_pemesanan', function (Blueprint $table){
             $table->foreign('id_pemesanan')->references('id_pemesanan')->on('pemesanan');
             $table->foreign('id_meja')->references('id_meja')->on('meja');
+            $table->foreign('id_menu')->references('id_menu')->on('menu');
         });
     }
 

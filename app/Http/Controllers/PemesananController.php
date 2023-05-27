@@ -26,7 +26,7 @@ class PemesananController extends Controller
         // $data = Pemesanan::join('produk', 'pemesanan.id_menu', '=', 'produk.id_menu')
         //     ->join('pengguna', 'pemesanan.id_user', '=', 'pengguna.id_user')
         //     ->get();
-        $datas = Pemesanan::with('detailPemesanan')->get();
+        $datas = Pemesanan::with(['detailPemesanan', 'detailMeja', 'detailPemesanan.detailMenu'])->get();
         return response()->json($datas);
     }
 
@@ -73,6 +73,7 @@ class PemesananController extends Controller
                 $isProdukExist = Menu::where("id_menu", $dataListProduk['id_menu'])->first();
                 if ($isProdukExist != null) {
                     $data = DetailPemesanan::create([
+                        'id_menu' => $dataListProduk['id_menu'],
                         'id_pemesanan' => $dataPemesanan->id_pemesanan,
                         'id_meja' => $dataPemesanan->id_meja,
                         'jumlah_pemesanan' => $dataListProduk['qty'],

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->integer('harga_menu');
             $table->enum('jenis_menu', ['makanan','minuman']);
             $table->text('deskripsi');
-            $table->string('gambar');
+            $table->string('gambarUrl');
             $table->timestamps();
         });
     }
