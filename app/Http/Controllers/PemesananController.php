@@ -26,6 +26,7 @@ class PemesananController extends Controller
         // $data = Pemesanan::join('produk', 'pemesanan.id_menu', '=', 'produk.id_menu')
         //     ->join('pengguna', 'pemesanan.id_user', '=', 'pengguna.id_user')
         //     ->get();
+
         $datas = Pemesanan::with(['detailPemesanan', 'detailMeja', 'detailPemesanan.detailMenu'])->get();
         return response()->json($datas);
     }
@@ -130,22 +131,26 @@ class PemesananController extends Controller
     public function update(UpdatePemesananRequest $request, $id)
     {
         //
-        $this->validate($request, [
-            'id_menu' => 'required',
-            'id_users' => 'required',
-            'jumlah_pemesanan' => 'required',
-            'total_harga' => 'required',
-        ]);
-        $data = Pemesanan::where('id_pemesanan', $id)->update([
-            'id_menu' => $request->id_menu,
-            'id_users' => $request->id_users,
+        $data = DetailPemesanan::where('id_detail_pemesanan', $id)->update([
             'jumlah_pemesanan' => $request->jumlah_pemesanan,
-            'total_harga' => $request->total_harga,
         ]);
-        return response()->json([
-            "msg" => "Data Berhasil Di Update",
-            "data" => $data
-        ]);
+        return response()->json($data);
+        // $this->validate($request, [
+        //     'id_menu' => 'required',
+        //     'id_users' => 'required',
+        //     'jumlah_pemesanan' => 'required',
+        //     'total_harga' => 'required',
+        // ]);
+        // $data = Pemesanan::where('id_pemesanan', $id)->update([
+        //     'id_menu' => $request->id_menu,
+        //     'id_users' => $request->id_users,
+        //     'jumlah_pemesanan' => $request->jumlah_pemesanan,
+        //     'total_harga' => $request->total_harga,
+        // ]);
+        // return response()->json([
+        //     "msg" => "Data Berhasil Di Update",
+        //     "data" => $data
+        // ]);
     }
 
     /**
@@ -157,11 +162,21 @@ class PemesananController extends Controller
     public function destroy($id)
     {
         //
-        $data = Pemesanan::where('id_pemesanan', $id)->delete();
-        return response()->json([
-            "msg" => "Data Berhasil dihapus",
-            "data" => $data,
-            "id" => $id,
+        // $pemesanan->delete();
+        DetailPemesanan::where('id_pemesanan' ,$id)->delete();
+        Pemesanan::where('id_pemesanan' , $id)->delete();
+    }
+    public function UpdateQty(UpdatePemesananRequest $request, $id)
+    {
+        // $validator = Validator::make($request->all(), [
+        //     'jumlah_pemesanan' => 'required',
+        // ]);
+        // if ($validator->fails()) {
+        //     return response()->json($validator->errors(), 422);
+        // }
+        $data = DetailPemesanan::where('id_detail_pemesanan', $id)->update([
+            'jumlah_pemesanan' => $request->jumlah_pemesanan,
         ]);
+        return response()->json($data);
     }
 }

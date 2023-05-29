@@ -29,6 +29,7 @@ Route::resource('pengguna', PenggunaController::class);
 Route::resource('pemesanan', PemesananController::class);
 Route::resource('meja', MejaController::class);
 Route::get('/getimg', [MenuController::class, 'getImage']);
+Route::put('/updateqty/{$id}', [PemesananController::class, 'UpdateQty']);
 
 
 // Route::group(['middleware' => ['auth' , 'hakakses:admin,manajer,kasir']], function(){

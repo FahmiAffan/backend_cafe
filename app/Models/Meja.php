@@ -10,4 +10,5 @@ class Meja extends Model
     use HasFactory;
     protected $table = 'meja';
     protected $fillable = ['nomor_meja'];
+    protected $primary_key = ['nomor_meja'];
 }
