@@ -26,6 +26,6 @@ class DetailPemesanan extends Model
     }
     public function detailMenu()
     {
-        return $this->hasOne(Menu::class, 'id_menu');
+        return $this->hasOne(Menu::class, 'id_menu' , 'id_menu');
     }
 }

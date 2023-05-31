@@ -88,6 +88,7 @@ class PembayaranController extends Controller
     public function update(UpdatePembayaranRequest $request, Pembayaran $pembayaran)
     {
         //
+        $total_harga = $request->harga_menu * $request->qty;
     }
 
     /**

@@ -18,6 +18,6 @@ class Pemesanan extends Model
     }
     public function detailMeja()
     {
-        return $this->hasOne(Meja::class, 'id_meja');
+        return $this->hasOne(Meja::class, 'id_meja' , 'id_meja');
     }
 }
